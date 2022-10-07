@@ -1,0 +1,41 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+var awsPluginVersion = "2.17.238"
+
+dependencies {
+    implementation("software.amazon.awssdk:url-connection-client:${awsPluginVersion}") {
+        exclude(group: "software.amazon.awssdk", module: "netty-nio-client")
+        exclude(group: "software.amazon.awssdk", module: "apache-client")
+    }
+    implementation "software.amazon.awssdk:s3:${awsPluginVersion}"
+    implementation "software.amazon.awssdk:sts:${awsPluginVersion}"
+    implementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.3'
+    implementation("software.amazon.awssdk:apache-client:${awsPluginVersion}") {
+        exclude(group: "commons-logging", module: "commons-logging")
+    }
+
+    implementation "software.amazon.awssdk:netty-nio-client:${awsPluginVersion}"
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'ca.Main'
+    }
+}
